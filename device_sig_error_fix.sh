@@ -11,19 +11,19 @@ if /sbin/ping -oq $2 &> /dev/null
     /usr/bin/curl --silent --output QuickAdd-Clinic.zip "$qaURL"
 
     /bin/echo "unzipping package"
-    sudo unzip QuickAdd-Clinic.zip -d .;sudo rm -rf __MACOSX
+    unzip QuickAdd-Clinic.zip -d .;sudo rm -rf __MACOSX
 
     /bin/echo "updating time"
-    sudo ntpdate -u $(systemsetup -getnetworktimeserver|awk '{print $4}')
+    ntpdate -u $(systemsetup -getnetworktimeserver|awk '{print $4}')
 
     /bin/echo "removing jamf framework"
-    sudo jamf removeFramework -verbose
+    jamf removeFramework -verbose
 
     /bin/echo "installing QuickAdd package"
-    sudo installer -dumplog -verbose -pkg QuickAdd-Clinic.pkg -target /
+    installer -dumplog -verbose -pkg QuickAdd-Clinic.pkg -target /
 
     /bin/echo "running a(nother) recon"
-    sudo /usr/local/bin/jamf recon -verbose
+    /usr/local/bin/jamf recon -verbose
 
 ## Thanks to Rich Trouton for the following gem!    
 
