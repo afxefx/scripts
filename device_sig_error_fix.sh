@@ -8,10 +8,10 @@ if /sbin/ping -oq $2 &> /dev/null
     then
 
     /bin/echo "grabbing package"
-    /usr/bin/curl --silent --output QuickAdd.pkg.zip "$qaURL"
+    /usr/bin/curl --silent --output QuickAdd-Clinic.zip "$qaURL"
 
     /bin/echo "unzipping package"
-    sudo unzip QuickAdd.pkg.zip -d .;sudo rm -rf __MACOSX
+    sudo unzip QuickAdd-Clinic.zip -d .;sudo rm -rf __MACOSX
 
     /bin/echo "updating time"
     sudo ntpdate -u $(systemsetup -getnetworktimeserver|awk '{print $4}')
@@ -20,7 +20,7 @@ if /sbin/ping -oq $2 &> /dev/null
     sudo jamf removeFramework -verbose
 
     /bin/echo "installing QuickAdd package"
-    sudo installer -dumplog -verbose -pkg QuickAdd.pkg -target /
+    sudo installer -dumplog -verbose -pkg QuickAdd-Clinic.pkg -target /
 
     /bin/echo "running a(nother) recon"
     sudo /usr/local/bin/jamf recon -verbose
@@ -36,6 +36,9 @@ if /sbin/ping -oq $2 &> /dev/null
 
     ## /bin/echo "running policy"
     ## sudo /usr/local/bin/jamf policy -verbose
+
+    rm -rf ./QuickAdd-Clinic.zip
+    rm -rf ./QuickAdd-Clinic.pkg
 
 else
 
