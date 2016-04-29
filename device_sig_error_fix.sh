@@ -1,17 +1,22 @@
 #!/bin/bash
 
 qaURL=$1
-
+zip_name=$(echo "$qaURL" | cut -f7 -d '/')
+temp_name=$(echo "$zip_name" | cut -f1 -d '.')
+#echo "$temp_name"
+pkg_name=$(echo "$temp_name.pkg")
+#echo "$zip_name"
+#echo "$pkg_name"
 
 if /sbin/ping -oq $2 &> /dev/null
 
     then
 
     /bin/echo "grabbing package"
-    /usr/bin/curl --silent --output QuickAdd-Clinic.zip "$qaURL"
+    /usr/bin/curl --silent --output "$zip_name" "$qaURL"
 
     /bin/echo "unzipping package"
-    sudo unzip QuickAdd-Clinic.zip -d .;sudo rm -rf __MACOSX
+    sudo unzip "$zip_name" -d .;sudo rm -rf __MACOSX
 
     /bin/echo "updating time"
     sudo ntpdate -u $(systemsetup -getnetworktimeserver|awk '{print $4}')
@@ -20,7 +25,7 @@ if /sbin/ping -oq $2 &> /dev/null
     sudo jamf removeFramework -verbose
 
     /bin/echo "installing QuickAdd package"
-    sudo installer -dumplog -verbose -pkg QuickAdd-Clinic.pkg -target /
+    sudo installer -dumplog -verbose -pkg "$pkg_name" -target /
 
     /bin/echo "running a(nother) recon"
     sudo /usr/local/bin/jamf recon -verbose
@@ -37,8 +42,8 @@ if /sbin/ping -oq $2 &> /dev/null
     ## /bin/echo "running policy"
     ## sudo /usr/local/bin/jamf policy -verbose
 
-    rm -rf ./QuickAdd-Clinic.zip
-    rm -rf ./QuickAdd-Clinic.pkg
+    rm -rf ./"$zip_name"
+    rm -rf ./"$pkg_name"
 
 else
 
