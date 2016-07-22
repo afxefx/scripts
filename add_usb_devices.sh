@@ -1,3 +1,4 @@
+#!/bin/bash
 vmxcfg="/Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx"
 
 if ! [ -e "${vmxcfg}" ]; then
