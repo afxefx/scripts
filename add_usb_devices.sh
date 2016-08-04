@@ -18,7 +18,7 @@ if ! [ -e "${vmxcfg}" ]; then
 	new0='usb.autoConnect.device0 = "vid:082b autoclean:0"'
 	new1='usb.autoConnect.device1 = "vid:0b95 autoclean:0"'
 
-	ech ""
+	echo ""
 	echo "Updating USB auto connect values"
 	sed -i '' -e 's/'"$curr0"'/'"$new0"'/g' /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
 	sed -i '' -e 's/'"$curr1"'/'"$new1"'/g' /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
