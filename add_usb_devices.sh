@@ -9,7 +9,7 @@ if ! [ -e "${vmxcfg}" ]; then
 	cp /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan_backup.vmx
 
 	echo "Config file currently contains:"
-	current=$(cat /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx | tr '\r' '\n' | grep "usb.autoConnect")
+	current=$(grep "usb.autoConnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx | sed G)
 	echo $current
 
 	curr0=$(grep "usb.autoConnect.device0" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
@@ -18,7 +18,7 @@ if ! [ -e "${vmxcfg}" ]; then
 	new0='usb.autoConnect.device0 = "vid:082b autoclean:0"'
 	new1='usb.autoConnect.device1 = "vid:0b95 autoclean:0"'
 
-	echo ""
+	ech ""
 	echo "Updating USB auto connect values"
 	sed -i '' -e 's/'"$curr0"'/'"$new0"'/g' /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
 	sed -i '' -e 's/'"$curr1"'/'"$new1"'/g' /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
@@ -27,7 +27,7 @@ if ! [ -e "${vmxcfg}" ]; then
 	echo ""
 
 	echo "Config file after alterations:"
-	new=$(cat /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx | tr '\r' '\n' | grep "usb.autoConnect")
+	new=$(grep "usb.autoConnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx | sed G)
 	echo $new
 
 fi
