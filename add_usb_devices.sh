@@ -9,7 +9,8 @@ if ! [ -e "${vmxcfg}" ]; then
 	cp /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan_backup.vmx
 
 	echo "Config file currently contains:"
-	grep "usb.autoconnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
+	current=$(grep "usb.autoconnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
+	echo $current
 
 	curr0=$(grep "usb.autoConnect.device0" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
 	curr1=$(grep "usb.autoConnect.device1" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
@@ -24,7 +25,8 @@ if ! [ -e "${vmxcfg}" ]; then
 	sed -i '' -e '/'usb.autoConnect.device3'/d' /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
 
 	echo "Config file after alterations:"
-	grep "usb.autoconnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
+	new=$(grep "usb.autoconnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
+	echo $new
 
 fi
 exit
