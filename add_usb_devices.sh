@@ -12,7 +12,7 @@ if ! [ -e "${vmxcfg}" ]; then
 
         total=$(grep -r "usb.autoConnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx | grep -c "autoConnect")
 
-        if [ total -eq 1 ]; then
+        if [ $total -eq 1 ]; then
                 curr0=$(grep "usb.autoConnect.device0" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
 
                 new0='usb.autoConnect.device0 = "vid:082b autoclean:0"'
@@ -26,7 +26,7 @@ if ! [ -e "${vmxcfg}" ]; then
                 echo ""
         fi
 
-        if [ total -ge 2 ]; then
+        if [ $total -ge 2 ]; then
                 curr0=$(grep "usb.autoConnect.device0" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)
                 curr1=$(grep "usb.autoConnect.device1" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx)        
 
