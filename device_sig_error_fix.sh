@@ -29,6 +29,10 @@ if /sbin/ping -oq $2 &> /dev/null
 
     /bin/echo "running a(nother) recon"
     sudo /usr/local/bin/jamf recon -verbose
+    sleep 15
+    /usr/local/bin/jamfjamf policy -id 3793
+    /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -allowAccessFor -specifiedUsers
+    /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -access -on -privs -DeleteFiles -ControlObserve -TextMessages -OpenQuitApps -GenerateReports -RestartShutDown -SendFiles -ChangeSettings -users Casper
 
 ## Thanks to Rich Trouton for the following gem!    
 
