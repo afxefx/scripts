@@ -24,6 +24,9 @@ if /sbin/ping -oq $2 &> /dev/null
     /bin/echo "removing jamf framework"
     sudo jamf removeFramework -verbose
 
+    /bin/echo "deleting mgt account"
+    dscl . delete /Users/Casper
+
     /bin/echo "installing QuickAdd package"
     sudo installer -dumplog -verbose -pkg "$pkg_name" -target /
 
