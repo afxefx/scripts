@@ -14,11 +14,11 @@ if [ $RUNNING == 0 ];then
 fi
 
 VMPATH=`vmrun list | tail -n -1`
-echo "Path to VMX file: " $VMPATH
+#echo "Path to VMX file: " $VMPATH
 LOGPATH=/Library/Application\ Support/VMware/OPT2016.log
 
 if [ -f "$LOGPATH" ];then
-	echo "Log file exists and will be removed"
+	#echo "Log file exists and will be removed"
 	rm "$LOGPATH"
 fi
 
