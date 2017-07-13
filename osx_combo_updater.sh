@@ -6,34 +6,32 @@
 # Web: 	http://RhymesWithDiploma.com
 # Date:	2014-05-15
 
-	# This is the only thing you _have_ to change
-URL="$1"
+# Modified by Jerry Sullivan
+# Date: 2017-07-13
 
-# You shouldn't need to change anything below this line.
+	# First arg of script is URL of combo update
+if [[ -z "$1" || ]];then
+	echo "OS X Combo update URL not specified"
+	exit 1
+else
+	URL="$1"
+fi
 
-	# This is where the combo DMG will be downloaded to
-DIR="/tmp"
+	# This is where the combo DMG will be downloaded to if second arg is passed
+if [[ -z "$2" || ]];then
+	echo "Download directory not specified, using tmp directory"
+	DIR="/tmp"
+else
+	DIR="$2"
+fi
 
 	# this is the name of this script, minus the path and extension
 NAME="$0"
 
 	# This is where we will log what happens
-LOG="/tmp/osx_combo_updater.log"
+LOG="$DIR/osx_combo_updater.log"
 
 ################################################################################################
-
-
-
-FILENAME=$(echo "${URL##*/}")
-
-REMOTE_SIZE=`curl --fail --head --location --silent "$URL" \
-| egrep '^Content-Length' \
-| tail -1 \
-| tr -dc '[0-9]'`
-
-	# needed for zstat and $EPOCHSECONDS
-#zmodload zsh/stat
-#zmodload zsh/datetime
 
 timestamp () {
 	#strftime "%Y-%m-%d %H:%M:%S" "$EPOCHSECONDS"
@@ -49,11 +47,23 @@ function die {
 	exit 1
 }
 
+FILENAME=$(echo "${URL##*/}")
 
+REMOTE_SIZE=`curl --fail --head --location --silent "$URL" \
+| egrep '^Content-Length' \
+| tail -1 \
+| tr -dc '[0-9]'`
+
+log "Update URL: $URL"
+log "Download directory: $DIR"
+log "Remote file name: $FILENAME"
+log "Remote file size: $REMOTE_SIZE"
 
 LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
+log "Latest version: $LATEST_VERSION"
 
 INSTALLED_VERSION=`sw_vers -productVersion`
+log "Installed version: $INSTALLED_VERSION"
 
 function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
@@ -138,6 +148,7 @@ cd "$DIR"
 if [ -e "$FILENAME" ]
 then
 	LOCAL_SIZE=`stat -L "$FILENAME" | awk {'print $8'}`
+	log "Local file size: $LOCAL_SIZE"
 else
 	LOCAL_SIZE='0'
 fi
@@ -183,5 +194,3 @@ else
 fi
 
 exit
-#
-#EOF
