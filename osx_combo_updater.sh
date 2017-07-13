@@ -49,15 +49,11 @@ function die {
 
 FILENAME=$(echo "${URL##*/}")
 
-REMOTE_SIZE=`curl --fail --head --location --silent "$URL" \
-| egrep '^Content-Length' \
-| tail -1 \
-| tr -dc '[0-9]'`
+REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^Content-Length' | tail -1 | tr -dc '[0-9]'`
 
 log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
-log "Remote file size: $REMOTE_SIZE"
 
 LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
 log "Latest version: $LATEST_VERSION"
@@ -149,6 +145,7 @@ if [ -e "$FILENAME" ]
 then
 	LOCAL_SIZE=`stat -L "$FILENAME" | awk {'print $8'}`
 	log "Local file size: $LOCAL_SIZE"
+	log "Remote file size: $REMOTE_SIZE"
 else
 	LOCAL_SIZE='0'
 fi
