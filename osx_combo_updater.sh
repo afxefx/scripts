@@ -10,7 +10,7 @@
 # Date: 2017-07-13
 
 	# First arg of script is URL of combo update
-if [[ -z "$1" || ]];then
+if [[ -z "$1" ]];then
 	echo "OS X Combo update URL not specified"
 	exit 1
 else
@@ -18,7 +18,7 @@ else
 fi
 
 	# This is where the combo DMG will be downloaded to if second arg is passed
-if [[ -z "$2" || ]];then
+if [[ -z "$2" ]];then
 	echo "Download directory not specified, using tmp directory"
 	DIR="/tmp"
 else
