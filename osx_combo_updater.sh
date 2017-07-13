@@ -35,7 +35,7 @@ LOG="$DIR/osx_combo_updater.log"
 
 timestamp () {
 	#strftime "%Y-%m-%d %H:%M:%S" "$EPOCHSECONDS"
-	date
+	$(date)
 }
 
 function log {
