@@ -18,7 +18,7 @@ DIR="/tmp"
 NAME="$0"
 
 	# This is where we will log what happens
-LOG="/tmp/$NAME.log"
+LOG="/tmp/osx_combo_updater.log"
 
 ################################################################################################
 
