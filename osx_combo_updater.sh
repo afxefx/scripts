@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Purpose: Download and install Mac OS X’s combo updater
 #
 # From:	Tj Luo.ma
@@ -7,7 +7,7 @@
 # Date:	2014-05-15
 
 	# This is the only thing you _have_ to change
-URL='$1'
+URL="$1"
 
 # You shouldn't need to change anything below this line.
 
@@ -15,7 +15,7 @@ URL='$1'
 DIR="/tmp"
 
 	# this is the name of this script, minus the path and extension
-NAME="$0:t:r"
+NAME="$0"
 
 	# This is where we will log what happens
 LOG="/tmp/$NAME.log"
@@ -24,7 +24,7 @@ LOG="/tmp/$NAME.log"
 
 
 
-FILENAME="$URL:t"
+FILENAME=$(echo "${URL##*/}")
 
 REMOTE_SIZE=`curl --fail --head --location --silent "$URL" \
 | egrep '^Content-Length' \
@@ -32,11 +32,12 @@ REMOTE_SIZE=`curl --fail --head --location --silent "$URL" \
 | tr -dc '[0-9]'`
 
 	# needed for zstat and $EPOCHSECONDS
-zmodload zsh/stat
-zmodload zsh/datetime
+#zmodload zsh/stat
+#zmodload zsh/datetime
 
 timestamp () {
-	strftime "%Y-%m-%d %H:%M:%S" "$EPOCHSECONDS"
+	#strftime "%Y-%m-%d %H:%M:%S" "$EPOCHSECONDS"
+	date
 }
 
 function log {
@@ -50,7 +51,7 @@ function die {
 
 
 
-LATEST_VERSION=`echo "$URL:t:r" | tr -dc '[0-9].'`
+LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
 
 INSTALLED_VERSION=`sw_vers -productVersion`
 
@@ -136,7 +137,7 @@ cd "$DIR"
 
 if [ -e "$FILENAME" ]
 then
-	LOCAL_SIZE=`zstat -L +size "$FILENAME"`
+	LOCAL_SIZE=`stat -L "$FILENAME" | awk {'print $8'}`
 else
 	LOCAL_SIZE='0'
 fi
@@ -151,15 +152,10 @@ do
 	then
 		fetch
 
-		LOCAL_SIZE=`zstat -L +size "$FILENAME"`
+		LOCAL_SIZE=`stat -L "$FILENAME" | awk {'print $8'}`
 
 	else
 		MSG="We failed to fetch $URL to $DIR/$FILENAME after $COUNT attempts. Giving up."
-
-		if (( $+commands[po.sh] ))
-		then
-			po.sh "$NAME on `hostname -f`: $MSG"
-		fi
 
 		die "$MSG"
 	fi
@@ -180,17 +176,7 @@ then
 
 	log "Rebooting in one minute"
 
-	if (( $+commands[po.sh] ))
-	then
-		po.sh "$NAME: $PKG installed on `hostname -f`. Rebooting in one minute"
-	fi
-
 else
-
-	if (( $+commands[po.sh] ))
-	then
-		po.sh "$NAME: $PKG FAILED to install on `hostname -f`"
-	fi
 
 	die "Installation failed, not rebooting"
 
