@@ -48,6 +48,7 @@ function die {
 }
 
 FILENAME=$(echo "${URL##*/}")
+#echo $FILENAME
 
 REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^Content-Length' | tail -1 | tr -dc '[0-9]'`
 
@@ -55,7 +56,8 @@ log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
 
-LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
+#LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
+LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*combo\([0-9.]*\).*/\1/" | cut -c -7`
 log "Latest version: $LATEST_VERSION"
 
 INSTALLED_VERSION=`sw_vers -productVersion`
