@@ -57,7 +57,7 @@ log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
 
 #LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
-LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*combo\([0-9.]*\).*/\1/" | cut -c -7`
+LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*Combo\([0-9.]*\).*/\1/" | cut -c -7`
 log "Latest version: $LATEST_VERSION"
 
 INSTALLED_VERSION=`sw_vers -productVersion`
