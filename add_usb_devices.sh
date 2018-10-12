@@ -26,7 +26,7 @@ if ! [ -e "${vmxcfg}" ]; then
         echo $new0 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
         echo $new1 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
         echo $new2 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
-        echo $new3 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
+        #echo $new3 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
         echo ""
 
         echo "Config file after alterations:"
