@@ -11,10 +11,11 @@ if ! [ -e "${vmxcfg}" ]; then
         grep "usb.autoConnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
 
         total=$(grep -r "usb.autoConnect" /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx | grep -c "autoConnect")
-        new0='usb.autoConnect.device0 = "vid:082b autoclean:0"'
-        new1='usb.autoConnect.device1 = "vid:0b95 autoclean:0"'
-        new2='usb.autoConnect.device2 = "vid:0fe2 autoclean:0"'
-        new3='usb.generic.autoconnect = "FALSE"'
+        new0='usb.autoConnect.device0 = "vid:0x082B pid:0x1003"'
+        new1='usb.autoConnect.device1 = "vid:0x082B pid:0x100A"'
+        new2='usb.autoConnect.device2 = "vid:0x0B95 pid:0x7720"'
+        new3='usb.autoConnect.device3 = "vid:0x0FE2 pid:0x0093"'
+        new4='usb.generic.autoconnect = "FALSE"'
                 
         echo ""
         echo "Updating USB auto connect values"
@@ -26,7 +27,8 @@ if ! [ -e "${vmxcfg}" ]; then
         echo $new0 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
         echo $new1 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
         echo $new2 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
-        #echo $new3 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
+        echo $new3 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
+        echo $new4 >> /Library/Application\ Support/VMware/Aycan.vmwarevm/Aycan.vmx
         echo ""
 
         echo "Config file after alterations:"
