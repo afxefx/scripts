@@ -27,7 +27,6 @@ fi
 
 	# Controller to only cache download for later install
 if [[ -n "$3" && "$3" == "cache" ]];then
-	echo "Caching installer only, using tmp directory"
 	CACHE=1
 else
 	CACHE=0
@@ -60,6 +59,7 @@ FILENAME=$(echo "${URL##*/}")
 
 REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^content-length' | tail -1 | tr -dc '[0-9]'`
 
+log "Cache mode only, update will not be installed"
 log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
