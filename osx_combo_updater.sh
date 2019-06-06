@@ -181,7 +181,7 @@ done
 
 if [[ "$CACHE" -eq 1 ]]
 then
-	echo "Caching complete, exiting"
+	log "Caching complete, exiting"
 	exit 0
 fi
 
