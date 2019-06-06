@@ -25,6 +25,14 @@ else
 	DIR="$2"
 fi
 
+	# Controller to only cache download for later install
+if [[ -n "$3" && "$3" == "cache" ]];then
+	echo "Caching installer only, using tmp directory"
+	CACHE=1
+else
+	CACHE=0
+fi
+
 	# this is the name of this script, minus the path and extension
 NAME="$0"
 
@@ -170,6 +178,12 @@ do
 		die "$MSG"
 	fi
 done
+
+if [[ "$CACHE" -eq 1 ]]
+then
+	echo "Caching complete, exiting"
+	exit 0
+fi
 
 	# mount the DMG
 mntdmg
