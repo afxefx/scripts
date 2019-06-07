@@ -26,11 +26,17 @@ else
 fi
 
 	# Controller to only cache download for later install
-if [[ -n "$3" && "$3" == "cache" ]];then
-	echo "Cache mode only, update will not be installed"
-	CACHE=1
-else
-	CACHE=0
+CACHE=0
+UPDATE=0
+if [[ -n "$3" ]];then
+	if [[ "$3" == "cache" ]]
+	then
+		echo "Cache mode only, update will not be installed"
+		CACHE=1
+	elif [[ "$3" == "update" ]]
+	then
+		UPDATE=1
+	fi
 fi
 
 	# this is the name of this script, minus the path and extension
@@ -64,35 +70,38 @@ log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
 
-#LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
-LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*Combo\([0-9.]*\).*/\1/" | cut -c -7`
-log "Latest version: $LATEST_VERSION"
-
-INSTALLED_VERSION=`sw_vers -productVersion`
-log "Installed version: $INSTALLED_VERSION"
-
-function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4); }'; }
-
-if [ $(version ${LATEST_VERSION}) -gt $(version ${INSTALLED_VERSION}) ]
+if [[ UPDATE -eq 0 ]]
 then
-	log "Update required: $INSTALLED_VERSION < $LATEST_VERSION"
+	#LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
+	LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*Combo\([0-9.]*\).*/\1/" | cut -c -7`
+	log "Latest version: $LATEST_VERSION"
+
+	INSTALLED_VERSION=`sw_vers -productVersion`
+	log "Installed version: $INSTALLED_VERSION"
+
+	function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
+	if [ $(version ${LATEST_VERSION}) -gt $(version ${INSTALLED_VERSION}) ]
+	then
+		log "Update required: $INSTALLED_VERSION < $LATEST_VERSION"
 
 		# if an update is required
 		# And if we are not in launchd
 		# and if the EUID is not root
 		# then get the user to enter their `sudo` creds
-	PPID_NAME=$(command ps -o 'command=' -cp ${PPID} 2>/dev/null )
+		PPID_NAME=$(command ps -o 'command=' -cp ${PPID} 2>/dev/null )
 
-	if [ "$PPID_NAME" != "launchd" ]
-	then
-		if [ "$EUID" != "0" ]
+		if [ "$PPID_NAME" != "launchd" ]
 		then
-			sudo -v || die "Failed to authenticate with 'sudo'."
+			if [ "$EUID" != "0" ]
+			then
+				sudo -v || die "Failed to authenticate with 'sudo'."
+			fi
 		fi
+	else
+		log "No update required: Installed: $INSTALLED_VERSION  Latest: $LATEST_VERSION"
+		exit 0
 	fi
-else
-	log "No update required: Installed: $INSTALLED_VERSION  Latest: $LATEST_VERSION"
-	exit 0
 fi
 
 function mntdmg {
