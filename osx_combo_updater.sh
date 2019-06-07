@@ -71,6 +71,7 @@ REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^content-len
 log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
+log "Remote file size: $REMOTE_SIZE"
 
 
 function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4); }'; }
