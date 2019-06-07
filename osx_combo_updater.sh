@@ -33,8 +33,10 @@ if [[ -n "$3" ]];then
 	then
 		echo "Cache mode only, update will not be installed"
 		CACHE=1
-	elif [[ "$3" == "update" ]]
+	fi
+	if [[ "$3" == "update" ]]
 	then
+		echo "Update mode only, combo updates will not be installed"
 		UPDATE=1
 	fi
 fi
@@ -70,6 +72,9 @@ log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
 
+
+function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
 if [[ "$UPDATE" -eq 0 ]]
 then
 	#LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
@@ -79,30 +84,31 @@ then
 	INSTALLED_VERSION=`sw_vers -productVersion`
 	log "Installed version: $INSTALLED_VERSION"
 
-	function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
-	if [ $(version ${LATEST_VERSION}) -gt $(version ${INSTALLED_VERSION}) ]
+if [ $(version ${LATEST_VERSION}) -gt $(version ${INSTALLED_VERSION}) ]
+then
+	log "Update required: $INSTALLED_VERSION < $LATEST_VERSION"
+
+	# if an update is required
+	# And if we are not in launchd
+	# and if the EUID is not root
+	# then get the user to enter their `sudo` creds
+	PPID_NAME=$(command ps -o 'command=' -cp ${PPID} 2>/dev/null )
+
+	if [ "$PPID_NAME" != "launchd" ]
 	then
-		log "Update required: $INSTALLED_VERSION < $LATEST_VERSION"
-
-		# if an update is required
-		# And if we are not in launchd
-		# and if the EUID is not root
-		# then get the user to enter their `sudo` creds
-		PPID_NAME=$(command ps -o 'command=' -cp ${PPID} 2>/dev/null )
-
-		if [ "$PPID_NAME" != "launchd" ]
+		if [ "$EUID" != "0" ]
 		then
-			if [ "$EUID" != "0" ]
-			then
-				sudo -v || die "Failed to authenticate with 'sudo'."
-			fi
+			sudo -v || die "Failed to authenticate with 'sudo'."
 		fi
-	else
-		log "No update required: Installed: $INSTALLED_VERSION  Latest: $LATEST_VERSION"
-		exit 0
 	fi
+else
+	log "No update required: Installed: $INSTALLED_VERSION  Latest: $LATEST_VERSION"
+	exit 0
 fi
+
+fi
+
 
 function mntdmg {
 
