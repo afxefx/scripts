@@ -27,7 +27,7 @@ fi
 
 	# Controller to only cache download for later install
 if [[ -n "$3" && "$3" == "cache" ]];then
-	log "Cache mode only, update will not be installed"
+	echo "Cache mode only, update will not be installed"
 	CACHE=1
 else
 	CACHE=0
