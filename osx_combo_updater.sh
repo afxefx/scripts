@@ -66,7 +66,10 @@ function die {
 FILENAME=$(echo "${URL##*/}")
 #echo $FILENAME
 
-REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^content-length' | tail -1 | tr -dc '[0-9]'`
+#10.12
+REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^Content-length' | tail -1 | tr -dc '[0-9]'`
+#10.13 or above
+#REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^content-length' | tail -1 | tr -dc '[0-9]'`
 
 log "Update URL: $URL"
 log "Download directory: $DIR"
