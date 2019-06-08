@@ -79,7 +79,7 @@ function version { echo "$@" | awk -F. '{ printf("15%03d%03d%03d\n", $1,$2,$3,$4
 if [[ "$UPDATE" -eq 0 ]]
 then
 	#LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
-	if [[ grep -q "10.12" $FILENAME ]]
+	if [[ $(grep -c "10.12" $FILENAME) -ge 1 ]]
 	then
 		LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*combo\([0-9.]*\).*/\1/" | cut -c -7`
 	else
