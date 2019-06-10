@@ -70,10 +70,10 @@ INSTALLED_VERSION=`sw_vers -productVersion`
 if [[ $(echo "$INSTALLED_VERSION" | grep -c "10.12") -eq 1 ]]
 then
 	#10.12
-	REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^Content-Length' | tail -1 | tr -dc '[0-9]'`
+	REMOTE_SIZE=`curl --fail --head --insecure --location --silent "$URL" | egrep '^Content-Length' | tail -1 | tr -dc '[0-9]'`
 else
 	#10.13 or above
-	REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^content-length' | tail -1 | tr -dc '[0-9]'`
+	REMOTE_SIZE=`curl --fail --head --insecure --location --silent "$URL" | egrep '^content-length' | tail -1 | tr -dc '[0-9]'`
 fi
 
 log "Update URL: $URL"
@@ -156,7 +156,7 @@ function fetch {
 
 	log "Attempting to fetch $URL to $PWD/$FILENAME"
 
-	curl --fail --location --continue-at - --output "$FILENAME" "$URL"
+	curl --fail --insecure --location --continue-at - --output "$FILENAME" "$URL"
 
 	EXIT="$?"
 
