@@ -67,7 +67,7 @@ FILENAME=$(echo "${URL##*/}")
 #echo $FILENAME
 
 INSTALLED_VERSION=`sw_vers -productVersion`
-if [[ $(echo "$INSTALLED_VERSION | grep -c "10.12") -eq 1 ]]
+if [[ $(echo "$INSTALLED_VERSION" | grep -c "10.12") -eq 1 ]]
 then
 	#10.12
 	REMOTE_SIZE=`curl --fail --head --location --silent "$URL" | egrep '^Content-Length' | tail -1 | tr -dc '[0-9]'`
