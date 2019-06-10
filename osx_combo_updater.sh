@@ -66,15 +66,7 @@ function die {
 FILENAME=$(echo "${URL##*/}")
 #echo $FILENAME
 
-INSTALLED_VERSION=`sw_vers -productVersion`
-if [[ $(echo "$INSTALLED_VERSION" | grep -c "10.12") -eq 1 ]]
-then
-	#10.12
-	REMOTE_SIZE=`curl --fail --head --insecure --location --silent "$URL" | egrep '^Content-Length' | tail -1 | tr -dc '[0-9]'`
-else
-	#10.13 or above
-	REMOTE_SIZE=`curl --fail --head --insecure --location --silent "$URL" | egrep '^content-length' | tail -1 | tr -dc '[0-9]'`
-fi
+REMOTE_SIZE=`curl --fail --head --insecure --location --silent "$URL" | egrep '^[Cc]ontent-[Ll]ength' | tail -1 | tr -dc '[0-9]'`
 
 log "Update URL: $URL"
 log "Download directory: $DIR"
@@ -89,7 +81,7 @@ then
 	#LATEST_VERSION=`echo "$FILENAME" | cut -c 12- | cut -c -7`
 	LATEST_VERSION=`echo "$FILENAME" | sed "s/^.*Combo\([0-9.]*\).*/\1/" | cut -c -7`
 	log "Latest version: $LATEST_VERSION"
-
+	INSTALLED_VERSION=`sw_vers -productVersion`
 	log "Installed version: $INSTALLED_VERSION"
 
 
