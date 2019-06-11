@@ -68,6 +68,12 @@ FILENAME=$(echo "${URL##*/}")
 
 REMOTE_SIZE=`curl --fail --head --insecure --location --silent "$URL" | egrep '^[Cc]ontent-[Ll]ength' | tail -1 | tr -dc '[0-9]'`
 
+if [[ -z "$REMOTE_SIZE" ]]
+then
+	log "Unable to get size of remote file, exiting"
+	exit 1
+fi
+
 log "Update URL: $URL"
 log "Download directory: $DIR"
 log "Remote file name: $FILENAME"
