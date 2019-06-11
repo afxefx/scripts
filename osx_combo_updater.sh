@@ -215,7 +215,6 @@ pkginstall
 
 if [ "$INSTALLED" = "yes" ]
 then
-	/usr/local/bin/jamf recon
 	sudo shutdown -r +1
 
 	log "Rebooting in one minute"
