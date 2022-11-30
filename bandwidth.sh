@@ -2,6 +2,9 @@
 if [[ -n "$1" && -n "$2" ]];then
 	if [[ "$2" -eq 0 ]];then
 		interface=$(ifconfig | \grep -B5 172.29 | \grep ^en | cut -c 1-3)
+		if [[ -z $interface ]];then
+                  interface=$(ifconfig | \grep -B5 10.38 | \grep ^en | cut -c 1-3)
+                fi
 	else
 		interface=$2
 	fi
